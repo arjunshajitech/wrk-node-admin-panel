@@ -1,13 +1,31 @@
 const express = require("express");
 const cookieParser = require("cookie-parser");
+var hbs = require("express-handlebars");
 const path = require("path");
 const session = require("express-session");
 const http = require("http");
 const connection = require("./connection");
 
+const {
+  defaultAdminEntrySQL,
+  createAdminTableSQL,
+  createTableSQL,
+} = require("./tables");
+
 const port = process.env.PORT | 3000;
 const app = express();
 
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "hbs");
+app.engine(
+  "hbs",
+  hbs.engine({
+    extname: "hbs",
+    defaultLayout: "layout",
+    layoutsDir: __dirname + "/views/layout/",
+    partialsDir: __dirname + "/views/partials",
+  })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -24,37 +42,49 @@ app.use(
 connection.connect(function (err) {
   if (err) throw err;
   console.log("MYSQL Connected!");
-
-  const createTableSQL = `
-  CREATE TABLE IF NOT EXISTS student_details (
-    id VARCHAR(36) PRIMARY KEY,
-    firstname VARCHAR(255),
-    lastname VARCHAR(255),
-    address VARCHAR(255),
-    email VARCHAR(255),
-    phone VARCHAR(20),
-    facebookid VARCHAR(255),
-    instagramid VARCHAR(255),
-    profileid VARCHAR(255),
-    questionsid VARCHAR(255)
-  )
-`;
-
-  connection.query(createTableSQL, (error, results, fields) => {
-    if (error) {
-      console.error("Error creating table: " + error.stack);
-      return;
-    }
-    console.log("Table created successfully");
-  });
+  connection.query(createTableSQL, (error, results, fields) => {});
+  connection.query(createAdminTableSQL, (error, results, fields) => {});
+  connection.query(defaultAdminEntrySQL, (error, results, fields) => {});
 });
 
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "index.html"));
+  res.render("admin/login", {
+    showError: false,
+  });
 });
 
-app.get("/home", (req, res) => {
-  res.sendFile(path.join(__dirname, "home.html"));
+app.post("/login", (req, res) => {
+  const { email, password } = req.body;
+  connection.query(
+    "SELECT * FROM admin_details WHERE email = ?",
+    [email],
+    (error, results, fields) => {
+      // if (error) {
+      //   console.error("Error querying database: " + error.stack);
+      //   res.status(500).json({ error: "Internal server error" });
+      //   return;
+      // }
+
+      if (results.length === 0) {
+        res.render("admin/login", {
+          showError: true,
+        });
+        return;
+      }
+
+      const admin = results[0];
+
+      if (admin.password !== password) {
+        res.render("admin/login", {
+          showError: true,
+        });
+        return;
+      }
+
+      res.render("admin/home", {});
+    }
+  );
+  return;
 });
 
 const httpServer = http.createServer(app);

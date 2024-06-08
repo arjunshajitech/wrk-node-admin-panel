@@ -1,0 +1,129 @@
+<style media="screen">
+  *, *:before, *:after { padding: 0; margin: 0; box-sizing: border-box; } body {
+  background-color: #080710; font-family: 'Poppins', sans-serif; color: #ffffff;
+  } .background { width: 100%; height: 100vh; position: fixed; top: 0; left: 0;
+  overflow: hidden; z-index: -1; } .background .shape { height: 200px; width:
+  200px; position: absolute; border-radius: 50%; } .shape:nth-child(1) {
+  background: linear-gradient(#1845ad, #23a2f6); left: -80px; top: -80px; }
+  .shape:nth-child(2) { background: linear-gradient(to right, #ff512f, #f09819);
+  right: -30px; bottom: -80px; } .shape:nth-child(3) { background:
+  linear-gradient(to left, #6a11cb, #2575fc); left: 10%; bottom: 10%; }
+  .shape:nth-child(4) { background: linear-gradient(to top right, #30cfd0,
+  #330867); right: 20%; top: 30%; } .shape:nth-child(5) { background:
+  linear-gradient(to top left, #f12711, #f5af19); left: 70%; bottom: 40%; }
+  .navbar { display: flex; justify-content: center; align-items: center; height:
+  80px; background-color: #1e1e1e; color: #ffffff; width: 100%; box-shadow: 0 0
+  10px rgba(0, 0, 0, 0.5); } .navbar h1 { font-size: 24px; } .container {
+  display: flex; flex-direction: column; align-items: center; margin-top: 40px;
+  } .create-button { background-color: #000000; color: #ffffff; padding: 10px
+  20px; font-size: 16px; font-weight: 600; border-radius: 5px; cursor: pointer;
+  margin-bottom: 20px; align-self: flex-end; margin-right: 10%; border: none;
+  transition: background-color 0.3s ease; } .create-button:hover {
+  background-color: #ffffff; color: #000000; } .student-table-container { width:
+  90%; margin: 20px auto; border-radius: 10px; backdrop-filter: blur(10px);
+  background-color: rgba(255,255,255,0.13); border: 2px solid
+  rgba(255,255,255,0.1); box-shadow: 0 0 40px rgba(8,7,16,0.6); overflow:
+  hidden; } .student-table { width: 100%; border-collapse: separate;
+  border-spacing: 0; background-color: rgba(255,255,255,0.1); text-align: left;
+  } .student-table th, .student-table td { padding: 15px; border: 1px solid
+  rgba(255,255,255,0.2); margin: 3px; } .student-table th { background-color:
+  rgba(0,0,0,0.5); font-weight: 600; } .student-table tr:nth-child(even) {
+  background-color: rgba(255,255,255,0.05); } .student-table .profile-pic {
+  width: 50px; height: 50px; border-radius: 50%; } .student-table
+  .download-button { background-color: #000000; color: #ffffff; padding: 5px
+  10px; font-size: 14px; font-weight: 600; border-radius: 5px; cursor: pointer;
+  text-decoration: none; transition: background-color 0.3s ease; }
+  .student-table .download-button:hover { background-color: #ffffff; color:
+  #000000; }
+</style>
+
+<div class="background">
+  <div class="shape"></div>
+  <div class="shape"></div>
+  <div class="shape"></div>
+  <div class="shape"></div>
+  <div class="shape"></div>
+</div>
+<div class="navbar">
+  <h1>Admin Panel</h1>
+</div>
+<div class="container">
+  <button class="create-button">Create Student</button>
+  <div class="student-table-container">
+    <table class="student-table">
+      <thead>
+        <tr>
+          <th>Profile Photo</th>
+          <th>ID</th>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Facebook ID</th>
+          <th>Instagram ID</th>
+          <th>Download</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><img
+              src="profile.jpg"
+              alt="Profile Photo"
+              class="profile-pic"
+            /></td>
+          <td>1</td>
+          <td>John</td>
+          <td>Doe</td>
+          <td>john.doe@example.com</td>
+          <td>123-456-7890</td>
+          <td>john.doe.fb</td>
+          <td>john.doe.ig</td>
+          <td><a
+              href="profile.jpg"
+              download
+              class="download-button"
+            >Download</a></td>
+        </tr>
+        <tr>
+          <td><img
+              src="profile.jpg"
+              alt="Profile Photo"
+              class="profile-pic"
+            /></td>
+          <td>2</td>
+          <td>Jane</td>
+          <td>Smith</td>
+          <td>jane.smith@example.com</td>
+          <td>098-765-4321</td>
+          <td>jane.smith.fb</td>
+          <td>jane.smith.ig</td>
+          <td><a
+              href="profile.jpg"
+              download
+              class="download-button"
+            >Download</a></td>
+        </tr>
+        <tr>
+          <td><img
+              src="profile.jpg"
+              alt="Profile Photo"
+              class="profile-pic"
+            /></td>
+          <td>3</td>
+          <td>Emily</td>
+          <td>Johnson</td>
+          <td>emily.johnson@example.com</td>
+          <td>456-789-0123</td>
+          <td>emily.johnson.fb</td>
+          <td>emily.johnson.ig</td>
+          <td><a
+              href="profile.jpg"
+              download
+              class="download-button"
+            >Download</a></td>
+        </tr>
+        <!-- Add more student rows as needed -->
+      </tbody>
+    </table>
+  </div>
+</div>
