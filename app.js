@@ -108,8 +108,6 @@ app.post("/create", (req, res) => {
     tiktok,
   } = req.body;
 
-  console.log(req.body);
-
   if (!name || !email) {
     return res.status(400).send("Name and Email are required.");
   }
@@ -306,6 +304,21 @@ app.get("/students/:id", (req, res) => {
         console.error("Error reading Excel file:", error);
         res.status(500).send({ message: "Error reading Excel file" });
       });
+  });
+});
+
+app.get("/students/image/:id", (req, res) => {
+  const imageName = req.params.id + ".jpg";
+  const imagePath = path.join(__dirname, "public", "image", imageName);
+
+  fs.access(imagePath, fs.constants.F_OK, (err) => {
+    if (err) {
+      return res
+        .status(404)
+        .json({ message: "No image found with ID: " + req.params.id });
+    }
+
+    res.sendFile(imagePath);
   });
 });
 
