@@ -46,13 +46,41 @@
       background-color: rgba(0, 0, 0, 0.5); justify-content: center;
       align-items: center; z-index: 1000; } .popup { background-color: #ffffff;
       padding: 20px; border-radius: 10px; text-align: center; color: #000000; }
-      .popup input[type="text"], .popup input[type="file"] { width: 80%;
+      .popup input[type="password"], .popup input[type="file"] { width: 80%;
       padding: 10px; margin: 10px 0; border-radius: 5px; border: 1px solid #ccc;
       } .popup .popup-button { background-color: #000000; color: #ffffff;
       padding: 10px 20px; font-size: 16px; font-weight: 600; border-radius: 5px;
       cursor: pointer; border: none; transition: background-color 0.3s ease;
       margin: 5px; } .popup .popup-button:hover { background-color: #ffffff;
-      color: #000000; }
+      color: #000000; } .login-container { *, *:before, *:after { padding: 0;
+      margin: 0; box-sizing: border-box; } body { background-color: #080710; }
+      .background { width: 430px; height: 520px; position: absolute; transform:
+      translate(-50%, -50%); left: 50%; top: 50%; } .background .shape { height:
+      200px; width: 200px; position: absolute; border-radius: 50%; }
+      .shape:first-child { background: linear-gradient(#1845ad, #23a2f6); left:
+      -80px; top: -80px; } .shape:last-child { background: linear-gradient(to
+      right, #ff512f, #f09819); right: -30px; bottom: -80px; } form { height:
+      770px; width: 500px; background-color: rgba(255, 255, 255, 0.13);
+      position: absolute; transform: translate(-50%, -50%); top: 50%; left: 50%;
+      border-radius: 10px; backdrop-filter: blur(10px); border: 2px solid
+      rgba(255, 255, 255, 0.1); box-shadow: 0 0 40px rgba(8, 7, 16, 0.6);
+      padding: 30px 35px; } form * { font-family: "Poppins", sans-serif; color:
+      #ffffff; letter-spacing: 0.5px; outline: none; border: none; } form p {
+      font-weight: 500; color: rgb(230, 49, 49); line-height: 42px; text-align:
+      center; } h3 { font-size: 32px; font-weight: 500; line-height: 42px;
+      text-align: center; } label { text-align: left; display: block;
+      margin-top: 5px; font-size: 16px; font-weight: 500; } input { display:
+      block; height: 50px; width: 100%; background-color: rgba(255, 255, 255,
+      0.07); border-radius: 3px; padding: 0 10px; margin-top: 8px; font-size:
+      14px; font-weight: 300; } ::placeholder { color: #e5e5e5; } button {
+      margin-top: 5px; width: 100%; background-color: #ffffff; color: #080710;
+      padding: 15px 0; font-size: 18px; font-weight: 600; border-radius: 5px;
+      cursor: pointer; } .social { margin-top: 30px; display: flex; } .social
+      div { background: red; width: 150px; border-radius: 3px; padding: 5px 10px
+      10px 5px; background-color: rgba(255, 255, 255, 0.27); color: #eaf0fb;
+      text-align: center; } .social div:hover { background-color: rgba(255, 255,
+      255, 0.47); } .social .fb { margin-left: 25px; } .social i { margin-right:
+      4px; } }
     </style>
     <script>
       function showPopup() {
@@ -98,27 +126,63 @@
             </tr>
           </thead>
           <tbody>
-            {{#each students}}
-              <tr>
-                <td><img
-                    src="{{profileid}}.jpg"
-                    alt="Profile Photo"
-                    class="profile-pic"
-                  /></td>
-                <td>{{id}}</td>
-                <td>{{firstname}}</td>
-                <td>{{lastname}}</td>
-                <td>{{email}}</td>
-                <td>{{phone}}</td>
-                <td>{{facebookid}}</td>
-                <td>{{instagramid}}</td>
-                <td><a
-                    href="{{profileid}}.jpg"
-                    download
-                    class="download-button"
-                  >Download</a></td>
-              </tr>
-            {{/each}}
+            <tr>
+              <td><img
+                  src="profile.jpg"
+                  alt="Profile Photo"
+                  class="profile-pic"
+                /></td>
+              <td>1</td>
+              <td>John</td>
+              <td>Doe</td>
+              <td>john.doe@example.com</td>
+              <td>123-456-7890</td>
+              <td>john.doe.fb</td>
+              <td>john.doe.ig</td>
+              <td><a
+                  href="profile.jpg"
+                  download
+                  class="download-button"
+                >Download</a></td>
+            </tr>
+            <tr>
+              <td><img
+                  src="profile.jpg"
+                  alt="Profile Photo"
+                  class="profile-pic"
+                /></td>
+              <td>2</td>
+              <td>Jane</td>
+              <td>Smith</td>
+              <td>jane.smith@example.com</td>
+              <td>098-765-4321</td>
+              <td>jane.smith.fb</td>
+              <td>jane.smith.ig</td>
+              <td><a
+                  href="profile.jpg"
+                  download
+                  class="download-button"
+                >Download</a></td>
+            </tr>
+            <tr>
+              <td><img
+                  src="profile.jpg"
+                  alt="Profile Photo"
+                  class="profile-pic"
+                /></td>
+              <td>3</td>
+              <td>Emily</td>
+              <td>Johnson</td>
+              <td>emily.johnson@example.com</td>
+              <td>456-789-0123</td>
+              <td>emily.johnson.fb</td>
+              <td>emily.johnson.ig</td>
+              <td><a
+                  href="profile.jpg"
+                  download
+                  class="download-button"
+                >Download</a></td>
+            </tr>
             <!-- Add more student rows as needed -->
           </tbody>
         </table>
@@ -127,13 +191,32 @@
 
     <div id="popup-overlay" class="popup-overlay">
       <div class="popup">
-        <h2>Create Student</h2>
-        <input type="text" id="first-name" placeholder="First Name" />
-        <input type="text" id="last-name" placeholder="Last Name" />
-        <input type="file" id="profile-photo" />
-        <br />
-        <button class="popup-button" onclick="submitStudent()">Submit</button>
-        <button class="popup-button" onclick="closePopup()">Close</button>
+        <div class="login-container">
+          <div class="background">
+            <div class="shape"></div>
+            <div class="shape"></div>
+          </div>
+          <form action="/create" method="post" enctype="multipart/form-data">
+            <h4>Create Student</h4>
+
+            <input type="text" name="firstname" placeholder="First Name" />
+            <input type="text" name="lastname" placeholder="Last Name" />
+            <input type="text" name="email" placeholder="Email" />
+            <input type="text" name="phone" placeholder="Phone" />
+            <input type="text" name="address" placeholder="Address" />
+            <input type="text" name="instagramid" placeholder="Instagram ID" />
+            <input type="text" name="facebookid" placeholder="Facebook ID" />
+
+            <label for="profile">Profile Image</label>
+            <input type="file" name="profile" />
+            <label for="profile">Questions</label>
+            <input type="file" name="questions" />
+
+            <button>Create</button>
+          </form>
+        </div>
+        {{! <button class="popup-button" onclick="submitStudent()">Submit</button>
+      <button class="popup-button" onclick="closePopup()">Close</button> }}
       </div>
     </div>
   </body>
