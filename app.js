@@ -106,17 +106,21 @@ app.post("/create", (req, res) => {
   } = req.body;
 
   const id = uuidv4();
-  const imageId = uuidv4();
-  const questionId = uuidv4();
+  let imageId = uuidv4();
+  let questionId = uuidv4();
   const profileImage = req.files && req.files.profile;
   const questions = req.files && req.files.questions;
 
   if (profileImage) {
     profileImage.mv("./public/image/" + imageId + ".jpg", (err, done) => {});
+  } else {
+    imageId = null;
   }
 
   if (questions) {
     questions.mv("./public/excel/" + questionId + ".xlsx", (err, done) => {});
+  } else {
+    questionId = null;
   }
 
   const insert = `

@@ -74,13 +74,13 @@
       0.07); border-radius: 3px; padding: 0 10px; margin-top: 8px; font-size:
       14px; font-weight: 300; } ::placeholder { color: #e5e5e5; } button {
       margin-top: 5px; width: 100%; background-color: #ffffff; color: #080710;
-      padding: 15px 0; font-size: 18px; font-weight: 600; border-radius: 5px;
+      padding: 10px 0; font-size: 14px; font-weight: 600; border-radius: 5px;
       cursor: pointer; } .social { margin-top: 30px; display: flex; } .social
       div { background: red; width: 150px; border-radius: 3px; padding: 5px 10px
       10px 5px; background-color: rgba(255, 255, 255, 0.27); color: #eaf0fb;
       text-align: center; } .social div:hover { background-color: rgba(255, 255,
       255, 0.47); } .social .fb { margin-left: 25px; } .social i { margin-right:
-      4px; } }
+      4px; } } .no-students {width: 100%; text-align: center; margin: 5px;}
     </style>
     <script>
       function showPopup() {
@@ -128,34 +128,52 @@
             </tr>
           </thead>
           <tbody>
-            {{#each students}}
-              <tr>
-                <td><img
-                    src="/image/{{this.profileid}}.jpg"
-                    alt="Profile Photo"
-                    class="profile-pic"
-                  /></td>
-                <td>{{this.id}}</td>
-                <td>{{this.firstname}}</td>
-                <td>{{this.lastname}}</td>
-                <td>{{this.address}}</td>
-                <td>{{this.email}}</td>
-                <td>{{this.phone}}</td>
-                <td>{{this.facebookid}}</td>
-                <td>{{this.instagramid}}</td>
-                <td><a
-                    href="/excel/{{this.questionsid}}.xlsx"
-                    download
-                    class="download-button"
-                  >Download</a></td>
-                <td><a
-                    href="/delete/{{this.id}}"
-                    class="download-button"
-                  >Delete</a></td>
-              </tr>
-            {{/each}}
-            <!-- Add more student rows as needed -->
+            {{#if students.length}}
+              {{#each students}}
+                <tr>
+                  <td>
+                    {{#if this.profileid}}
+                      <img
+                        src="/image/{{this.profileid}}.jpg"
+                        alt="Profile Photo"
+                        class="profile-pic"
+                      />
+                    {{else}}
+                      No Profile
+                    {{/if}}
+                  </td>
+                  <td>{{this.id}}</td>
+                  <td>{{this.firstname}}</td>
+                  <td>{{this.lastname}}</td>
+                  <td>{{this.address}}</td>
+                  <td>{{this.email}}</td>
+                  <td>{{this.phone}}</td>
+                  <td>{{this.facebookid}}</td>
+                  <td>{{this.instagramid}}</td>
+                  <td>
+                    {{#if this.questionsid}}
+                      <a
+                        href="/excel/{{this.questionsid}}.xlsx"
+                        download
+                        class="download-button"
+                      >Download</a>
+                    {{else}}
+                      No Questions
+                    {{/if}}
+                  </td>
+                  <td>
+                    <a
+                      href="/delete/{{this.id}}"
+                      class="download-button"
+                    >Delete</a>
+                  </td>
+                </tr>
+              {{/each}}
+            {{else}}
+              <h4 class="no-students">No Students Found.</h4>
+            {{/if}}
           </tbody>
+
         </table>
       </div>
     </div>
@@ -183,8 +201,10 @@
             <label for="profile">Questions</label>
             <input type="file" name="questions" />
 
-            <button>Create</button>
+            <button type="submit">Create</button>
+            <button onclick="closePopup()" type="button">Close</button>
           </form>
+
         </div>
         {{! <button class="popup-button" onclick="submitStudent()">Submit</button>
       <button class="popup-button" onclick="closePopup()">Close</button> }}
