@@ -68,33 +68,29 @@ app.post("/login", (req, res) => {
   connection.query(
     "SELECT * FROM admin_details WHERE email = ?",
     [email],
-    (error, results, fields) => {
-      // if (error) {
-      //   console.error("Error querying database: " + error.stack);
-      //   res.status(500).json({ error: "Internal server error" });
-      //   return;
-      // }
+    (error, adminResults, fields) => {
+      if (error) {
+        console.error("Error querying admin database: " + error.stack);
+        res.status(500).json({ error: "Internal server error" });
+        return;
+      }
 
-      if (results.length === 0) {
+      if (adminResults.length === 0 || adminResults[0].password !== password) {
         res.render("admin/login", {
           showError: true,
         });
         return;
       }
 
-      const admin = results[0];
-
-      if (admin.password !== password) {
-        res.render("admin/login", {
-          showError: true,
-        });
-        return;
-      }
-
-      res.render("admin/home", {});
+      // If login is successful, query student details
+      connection.query(
+        "SELECT * FROM student_details",
+        (studentError, studentResults, studentFields) => {
+          res.render("admin/home", { students: studentResults });
+        }
+      );
     }
   );
-  return;
 });
 
 app.post("/create", (req, res) => {
