@@ -36,7 +36,7 @@
       solid rgba(255,255,255,0.2); margin: 3px; } .student-table th {
       background-color: rgba(0,0,0,0.5); font-weight: 600; } .student-table
       tr:nth-child(even) { background-color: rgba(255,255,255,0.05); }
-      .student-table .profile-pic { width: 50px; height: 50px; border-radius:
+      .student-table .profile-pic { width: 60px; height: 60px; border-radius:
       50%; } .student-table .download-button { background-color: #ffffff; color:
       #000000; padding: 5px 10px; font-size: 14px; font-weight: 600;
       border-radius: 5px; cursor: pointer; text-decoration: none; transition:
@@ -118,71 +118,42 @@
               <th>ID</th>
               <th>First Name</th>
               <th>Last Name</th>
+              <th>Address</th>
               <th>Email</th>
               <th>Phone</th>
               <th>Facebook ID</th>
               <th>Instagram ID</th>
               <th>Download</th>
+              <th>Delete</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td><img
-                  src="profile.jpg"
-                  alt="Profile Photo"
-                  class="profile-pic"
-                /></td>
-              <td>1</td>
-              <td>John</td>
-              <td>Doe</td>
-              <td>john.doe@example.com</td>
-              <td>123-456-7890</td>
-              <td>john.doe.fb</td>
-              <td>john.doe.ig</td>
-              <td><a
-                  href="profile.jpg"
-                  download
-                  class="download-button"
-                >Download</a></td>
-            </tr>
-            <tr>
-              <td><img
-                  src="profile.jpg"
-                  alt="Profile Photo"
-                  class="profile-pic"
-                /></td>
-              <td>2</td>
-              <td>Jane</td>
-              <td>Smith</td>
-              <td>jane.smith@example.com</td>
-              <td>098-765-4321</td>
-              <td>jane.smith.fb</td>
-              <td>jane.smith.ig</td>
-              <td><a
-                  href="profile.jpg"
-                  download
-                  class="download-button"
-                >Download</a></td>
-            </tr>
-            <tr>
-              <td><img
-                  src="profile.jpg"
-                  alt="Profile Photo"
-                  class="profile-pic"
-                /></td>
-              <td>3</td>
-              <td>Emily</td>
-              <td>Johnson</td>
-              <td>emily.johnson@example.com</td>
-              <td>456-789-0123</td>
-              <td>emily.johnson.fb</td>
-              <td>emily.johnson.ig</td>
-              <td><a
-                  href="profile.jpg"
-                  download
-                  class="download-button"
-                >Download</a></td>
-            </tr>
+            {{#each students}}
+              <tr>
+                <td><img
+                    src="/image/{{this.profileid}}.jpg"
+                    alt="Profile Photo"
+                    class="profile-pic"
+                  /></td>
+                <td>{{this.id}}</td>
+                <td>{{this.firstname}}</td>
+                <td>{{this.lastname}}</td>
+                <td>{{this.address}}</td>
+                <td>{{this.email}}</td>
+                <td>{{this.phone}}</td>
+                <td>{{this.facebookid}}</td>
+                <td>{{this.instagramid}}</td>
+                <td><a
+                    href="/excel/{{this.questionsid}}.xlsx"
+                    download
+                    class="download-button"
+                  >Download</a></td>
+                <td><a
+                    href="/delete/{{this.id}}"
+                    class="download-button"
+                  >Delete</a></td>
+              </tr>
+            {{/each}}
             <!-- Add more student rows as needed -->
           </tbody>
         </table>

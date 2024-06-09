@@ -7,6 +7,7 @@ const http = require("http");
 const connection = require("./connection");
 const { v4: uuidv4 } = require("uuid");
 var fileUpload = require("express-fileupload");
+const fs = require("fs");
 
 const {
   defaultAdminEntrySQL,
@@ -104,28 +105,19 @@ app.post("/create", (req, res) => {
     address,
   } = req.body;
 
+  const id = uuidv4();
   const imageId = uuidv4();
   const questionId = uuidv4();
   const profileImage = req.files && req.files.profile;
   const questions = req.files && req.files.questions;
 
-  profileImage.mv("./public/image/" + imageId + ".jpg", (err, done) => {
-    // if (!err) {
-    //   res.render("admin/add-products");
-    // } else {
-    //   console.log(err);
-    // }
-  });
+  if (profileImage) {
+    profileImage.mv("./public/image/" + imageId + ".jpg", (err, done) => {});
+  }
 
-  questions.mv("./public/excel/" + questionId + ".xlsx", (err, done) => {
-    // if (!err) {
-    //   res.render("admin/add-products");
-    // } else {
-    //   console.log(err);
-    // }
-  });
-
-  const id = uuidv4();
+  if (questions) {
+    questions.mv("./public/excel/" + questionId + ".xlsx", (err, done) => {});
+  }
 
   const insert = `
     INSERT INTO student_details (id, firstname, lastname, address, email, phone, facebookid, instagramid, profileid, questionsid)
@@ -147,7 +139,71 @@ app.post("/create", (req, res) => {
     ],
     (error, results, fields) => {
       console.log("Student created successfully.");
-      res.render("admin/home", {});
+    }
+  );
+
+  connection.query(
+    "SELECT * FROM student_details",
+    (studentError, studentResults, studentFields) => {
+      res.render("admin/home", { students: studentResults });
+    }
+  );
+});
+
+app.get("/delete/:id", (req, res) => {
+  const { id } = req.params;
+
+  connection.query(
+    "SELECT profileid, questionsid FROM student_details WHERE id = ?",
+    [id],
+    (selectError, selectResults) => {
+      if (selectResults.length === 0) {
+        return res.status(404).send("Student not found.");
+      }
+
+      const { profileid, questionsid } = selectResults[0];
+
+      const deleteQuery = "DELETE FROM student_details WHERE id = ?";
+
+      connection.query(deleteQuery, [id], (deleteError, deleteResults) => {
+        const profileImagePath = path.join(
+          __dirname,
+          "public",
+          "image",
+          `${profileid}.jpg`
+        );
+        const questionsFilePath = path.join(
+          __dirname,
+          "public",
+          "excel",
+          `${questionsid}.xlsx`
+        );
+
+        fs.unlink(profileImagePath, (err) => {
+          if (err) {
+            console.error(`Failed to delete profile image: ${err.message}`);
+          }
+        });
+
+        fs.unlink(questionsFilePath, (err) => {
+          if (err) {
+            console.error(`Failed to delete questions file: ${err.message}`);
+          }
+        });
+
+        console.log("Student deleted successfully.");
+
+        connection.query(
+          "SELECT * FROM student_details",
+          (studentError, studentResults, studentFields) => {
+            if (studentError) {
+              return res.status(500).send(studentError);
+            }
+
+            res.render("admin/home", { students: studentResults });
+          }
+        );
+      });
     }
   );
 });
