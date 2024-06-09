@@ -97,14 +97,22 @@ app.post("/login", (req, res) => {
 
 app.post("/create", (req, res) => {
   const {
-    firstname,
-    lastname,
+    name,
     email,
-    phone,
-    facebookid,
-    instagramid,
-    address,
+    about,
+    website,
+    facebook,
+    instagram,
+    twiter,
+    youtube,
+    tiktok,
   } = req.body;
+
+  console.log(req.body);
+
+  if (!name || !email) {
+    return res.status(400).send("Name and Email are required.");
+  }
 
   const id = uuidv4();
   let imageId = uuidv4();
@@ -113,44 +121,63 @@ app.post("/create", (req, res) => {
   const questions = req.files && req.files.questions;
 
   if (profileImage) {
-    profileImage.mv("./public/image/" + imageId + ".jpg", (err, done) => {});
+    profileImage.mv("./public/image/" + imageId + ".jpg", (err, done) => {
+      if (err) {
+        console.error("Error saving profile image:", err);
+        return res.status(500).send("Error saving profile image.");
+      }
+    });
   } else {
     imageId = null;
   }
 
   if (questions) {
-    questions.mv("./public/excel/" + questionId + ".xlsx", (err, done) => {});
+    questions.mv("./public/excel/" + questionId + ".xlsx", (err, done) => {
+      if (err) {
+        console.error("Error saving questions file:", err);
+        return res.status(500).send("Error saving questions file.");
+      }
+    });
   } else {
     questionId = null;
   }
 
   const insert = `
-    INSERT INTO student_details (id, firstname, lastname, address, email, phone, facebookid, instagramid, profileid, questionsid)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+    INSERT INTO student_details (id, name, email, about, website, instagram, twiter, facebook, youtube, tiktok, profileid, questionsid)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
   `;
   connection.query(
     insert,
     [
       id,
-      firstname,
-      lastname,
-      address,
+      name,
       email,
-      phone,
-      facebookid,
-      instagramid,
+      about,
+      website,
+      instagram,
+      twiter,
+      facebook,
+      youtube,
+      tiktok,
       imageId,
       questionId,
     ],
     (error, results, fields) => {
+      if (error) {
+        console.error("Error inserting student details:", error);
+        return res.status(500).send("Error creating student.");
+      }
       console.log("Student created successfully.");
-    }
-  );
-
-  connection.query(
-    "SELECT * FROM student_details",
-    (studentError, studentResults, studentFields) => {
-      res.render("admin/home", { students: studentResults });
+      connection.query(
+        "SELECT * FROM student_details",
+        (studentError, studentResults, studentFields) => {
+          if (studentError) {
+            console.error("Error fetching student details:", studentError);
+            return res.status(500).send("Error fetching students.");
+          }
+          res.render("admin/home", { students: studentResults });
+        }
+      );
     }
   );
 });
@@ -229,9 +256,9 @@ app.get("/students", (req, res) => {
   );
 });
 
-app.get("/students/:id/questions", (req, res) => {
+app.get("/students/:id", (req, res) => {
   const { id } = req.params;
-  const userQuery = "SELECT questionsid FROM student_details WHERE id = ?";
+  const userQuery = "SELECT * FROM student_details WHERE id = ?";
 
   connection.query(userQuery, [id], (error, results) => {
     if (error) {
@@ -243,7 +270,8 @@ app.get("/students/:id/questions", (req, res) => {
       return res.status(404).send({ message: "User not found." });
     }
 
-    const { questionsid } = results[0];
+    const student = results[0];
+    const { questionsid } = student;
 
     if (questionsid === null || questionsid === "") {
       return res.status(404).send({ message: "No questions found." });
@@ -255,7 +283,6 @@ app.get("/students/:id/questions", (req, res) => {
       "excel",
       `${questionsid}.xlsx`
     );
-
     const workbook = new excel.Workbook();
 
     workbook.xlsx
@@ -273,7 +300,7 @@ app.get("/students/:id/questions", (req, res) => {
           questions.push({ question, answer });
         });
 
-        res.json(questions);
+        res.json({ student, questions });
       })
       .catch((error) => {
         console.error("Error reading Excel file:", error);

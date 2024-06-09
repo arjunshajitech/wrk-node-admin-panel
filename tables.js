@@ -1,13 +1,15 @@
 const createTableSQL = `
 CREATE TABLE IF NOT EXISTS student_details (
   id VARCHAR(36) PRIMARY KEY,
-  firstname VARCHAR(255),
-  lastname VARCHAR(255),
-  address VARCHAR(255),
+  name VARCHAR(255),
   email VARCHAR(255),
-  phone VARCHAR(20),
-  facebookid VARCHAR(255),
-  instagramid VARCHAR(255),
+  about VARCHAR(255),
+  website VARCHAR(255),
+  instagram VARCHAR(255),
+  twiter VARCHAR(20),
+  facebook VARCHAR(255),
+  youtube VARCHAR(255),
+  tiktok VARCHAR(255),
   profileid VARCHAR(255),
   questionsid VARCHAR(255)
 )

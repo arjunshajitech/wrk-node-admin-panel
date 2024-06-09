@@ -60,7 +60,7 @@
       .shape:first-child { background: linear-gradient(#1845ad, #23a2f6); left:
       -80px; top: -80px; } .shape:last-child { background: linear-gradient(to
       right, #ff512f, #f09819); right: -30px; bottom: -80px; } form { height:
-      770px; width: 500px; background-color: rgba(255, 255, 255, 0.13);
+      670px; width: 700px; background-color: rgba(255, 255, 255, 0.13);
       position: absolute; transform: translate(-50%, -50%); top: 50%; left: 50%;
       border-radius: 10px; backdrop-filter: blur(10px); border: 2px solid
       rgba(255, 255, 255, 0.1); box-shadow: 0 0 40px rgba(8, 7, 16, 0.6);
@@ -85,7 +85,7 @@
     <script>
       function showPopup() {
       document.getElementById('popup-overlay').style.display = 'flex'; }
-      function closePopup() {
+      function closePopup() { document.getElementById("std").reset();
       document.getElementById('popup-overlay').style.display = 'none'; }
       function logout() { fetch('/logout') .then(response => { if (response.ok)
       { window.location.href = '/'; } else { alert('Logout failed'); } })
@@ -115,14 +115,15 @@
           <thead>
             <tr>
               <th>Profile Photo</th>
-              <th>ID</th>
-              <th>First Name</th>
-              <th>Last Name</th>
-              <th>Address</th>
+              <th>Name</th>
+              <th>About</th>
               <th>Email</th>
-              <th>Phone</th>
-              <th>Facebook ID</th>
-              <th>Instagram ID</th>
+              <th>Website</th>
+              <th>Instagram</th>
+              <th>Facebook</th>
+              <th>Youtube</th>
+              <th>Twiter</th>
+              <th>Tiktok</th>
               <th>Download</th>
               <th>Delete</th>
             </tr>
@@ -142,14 +143,15 @@
                       No Profile
                     {{/if}}
                   </td>
-                  <td>{{this.id}}</td>
-                  <td>{{this.firstname}}</td>
-                  <td>{{this.lastname}}</td>
-                  <td>{{this.address}}</td>
+                  <td>{{this.name}}</td>
+                  <td>{{this.about}}</td>
                   <td>{{this.email}}</td>
-                  <td>{{this.phone}}</td>
-                  <td>{{this.facebookid}}</td>
-                  <td>{{this.instagramid}}</td>
+                  <td>{{this.website}}</td>
+                  <td>{{this.instagram}}</td>
+                  <td>{{this.facebook}}</td>
+                  <td>{{this.youtube}}</td>
+                  <td>{{this.twiter}}</td>
+                  <td>{{this.tiktok}}</td>
                   <td>
                     {{#if this.questionsid}}
                       <a
@@ -185,21 +187,61 @@
             <div class="shape"></div>
             <div class="shape"></div>
           </div>
-          <form action="/create" method="post" enctype="multipart/form-data">
+          <form
+            id="std"
+            action="/create"
+            method="post"
+            enctype="multipart/form-data"
+          >
             <h4>Create Student</h4>
 
-            <input type="text" name="firstname" placeholder="First Name" />
-            <input type="text" name="lastname" placeholder="Last Name" />
-            <input type="text" name="email" placeholder="Email" />
-            <input type="text" name="phone" placeholder="Phone" />
-            <input type="text" name="address" placeholder="Address" />
-            <input type="text" name="instagramid" placeholder="Instagram ID" />
-            <input type="text" name="facebookid" placeholder="Facebook ID" />
+            <div class="split" style="display: flex; column-gap: 10px;">
+              <input type="text" name="name" placeholder="Name" required />
+              <input type="text" name="about" placeholder="About" required />
+            </div>
+
+            <div class="split" style="display: flex; column-gap: 10px;">
+              <input type="text" name="email" placeholder="Email" required />
+              <input
+                type="text"
+                name="website"
+                placeholder="Website"
+                required
+              />
+            </div>
+
+            <div class="split" style="display: flex; column-gap: 10px;">
+              <input
+                type="text"
+                name="instagram"
+                placeholder="Instagram"
+                required
+              />
+              <input type="text" name="twiter" placeholder="Twiter" required />
+
+            </div>
+
+            <div class="split" style="display: flex; column-gap: 10px;">
+              <input type="text" name="tiktok" placeholder="TikTok" required />
+              <input
+                type="text"
+                name="facebook"
+                placeholder="Facebook"
+                required
+              />
+            </div>
+
+            <input type="text" name="youtube" placeholder="Youtube" required />
 
             <label for="profile">Profile Image</label>
-            <input type="file" name="profile" />
+            <input type="file" name="profile" accept="image/*" required />
             <label for="profile">Questions</label>
-            <input type="file" name="questions" />
+            <input
+              type="file"
+              name="questions"
+              accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+              required
+            />
 
             <button type="submit">Create</button>
             <button onclick="closePopup()" type="button">Close</button>
