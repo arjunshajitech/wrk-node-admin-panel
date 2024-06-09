@@ -53,6 +53,12 @@ app.get("/", (req, res) => {
   });
 });
 
+app.get("/logout", (req, res) => {
+  res.render("admin/login", {
+    showError: false,
+  });
+});
+
 app.post("/login", (req, res) => {
   const { email, password } = req.body;
   connection.query(
