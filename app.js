@@ -8,6 +8,7 @@ const connection = require("./connection");
 const { v4: uuidv4 } = require("uuid");
 var fileUpload = require("express-fileupload");
 const fs = require("fs");
+const excel = require("exceljs");
 
 const {
   defaultAdminEntrySQL,
@@ -210,6 +211,75 @@ app.get("/delete/:id", (req, res) => {
       });
     }
   );
+});
+
+app.get("/students", (req, res) => {
+  connection.query(
+    "SELECT * FROM student_details",
+    (error, results, fields) => {
+      if (error) {
+        return res.status(500).send(error);
+      }
+
+      const response = {
+        studentsList: results,
+      };
+      res.json(response);
+    }
+  );
+});
+
+app.get("/students/:id/questions", (req, res) => {
+  const { id } = req.params;
+  const userQuery = "SELECT questionsid FROM student_details WHERE id = ?";
+
+  connection.query(userQuery, [id], (error, results) => {
+    if (error) {
+      console.error("Error finding user:", error);
+      return res.status(500).send("Error finding user");
+    }
+
+    if (results.length === 0) {
+      return res.status(404).send({ message: "User not found." });
+    }
+
+    const { questionsid } = results[0];
+
+    if (questionsid === null || questionsid === "") {
+      return res.status(404).send({ message: "No questions found." });
+    }
+
+    const filePath = path.join(
+      __dirname,
+      "public",
+      "excel",
+      `${questionsid}.xlsx`
+    );
+
+    const workbook = new excel.Workbook();
+
+    workbook.xlsx
+      .readFile(filePath)
+      .then(() => {
+        const worksheet = workbook.getWorksheet(1);
+        const questions = [];
+
+        worksheet.eachRow((row, rowNumber) => {
+          if (rowNumber === 1) return;
+
+          const question = row.getCell(1).value;
+          const answer = row.getCell(2).value;
+
+          questions.push({ question, answer });
+        });
+
+        res.json(questions);
+      })
+      .catch((error) => {
+        console.error("Error reading Excel file:", error);
+        res.status(500).send({ message: "Error reading Excel file" });
+      });
+  });
 });
 
 const httpServer = http.createServer(app);
